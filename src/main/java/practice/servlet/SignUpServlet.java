@@ -24,16 +24,16 @@ public class SignUpServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         ObjectMapper mapper = new ObjectMapper();
-        String filePath = getServletContext().getRealPath("/WEB-INF/data.json");
+        String filePath = "D:/java/JavaBackend/First_Servlet/src/main/resources/data.json";
         File file = new File(filePath);
 
         ArrayList<User> users = new ObjectMapper().readValue(file, new TypeReference<ArrayList<User>>() {});
 
         for (User user : users) {
-            System.out.println(user.username);
-            System.out.println(user.password);
             if (username.equals(user.username) && password.equals(user.password)) {
-                resp.sendRedirect("/index.jsp");
+                System.out.println("user already exists");
+                resp.sendRedirect("index.jsp");
+                return;
             }
         }
 
@@ -41,15 +41,7 @@ public class SignUpServlet extends HttpServlet {
         newUser.username = username;
         newUser.password = password;
         users.add(newUser);
-
-//        for (User user : users) {
-//            System.out.println(user.username);
-//            System.out.println(user.password);
-//        }
-
-        System.out.println();
         mapper.writerWithDefaultPrettyPrinter().writeValue(file, users);
         resp.sendRedirect("index.jsp");
-
     }
 }
